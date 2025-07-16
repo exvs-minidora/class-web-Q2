@@ -15,6 +15,8 @@ const spellInput         = document.getElementById("spell-input");
 const generateSpellBtn   = document.getElementById("generate-spell");
 const restoreBtn         = document.getElementById("restore-btn");
 
+const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
+
 let tasks = [];
 
 // =====================
@@ -184,7 +186,7 @@ restoreBtn.addEventListener("click", () => {
 // セレクト色の動的変更
 // =====================
 levelSelect.addEventListener("change", function () {
-  this.style.color = this.value === "" ? "#848484" : "#000";
+  this.style.color = this.value === "" ? "#848484" : fff;
 });
 
 // =====================
