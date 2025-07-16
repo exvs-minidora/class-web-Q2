@@ -4,34 +4,35 @@
   <meta charset="UTF-8">
   <title>えいたんごの だいぼうけん</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
   <!-- フォント -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
+  
+  <!-- スタイル -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- JS：deferで後から読み込む -->
+  
+  <!-- スクリプト -->
   <script src="js/script.js" defer></script>
 </head>
 <body class="light">
 
+  <!-- ヘッダー -->
   <header>
     <h1>えいたんごの だいぼうけん</h1>
   </header>
 
-  <!-- メニューアイコン -->
+  <!-- メニュー -->
   <div id="menu-toggle">☰</div>
-
-  <!-- メニュー本体 -->
-  <div id="menu-box" class="hidden">
+  <nav id="menu-box" class="hidden">
     <button onclick="showView('view-input')">入力</button>
     <button onclick="showView('view-list')">リスト</button>
     <button onclick="showView('view-done')">完了</button>
     <button onclick="showView('view-spell')">呪文</button>
-  </div>
+  </nav>
 
+  <!-- メインコンテンツ -->
   <main>
+    
     <!-- 入力画面 -->
     <section id="view-input" class="active">
       <h2>たんご を とうろく</h2>
@@ -39,6 +40,7 @@
       <input type="text" id="meaning" placeholder="いみ (例: りんご)">
       <input type="text" id="example" placeholder="れいぶん (例: I eat an apple.)">
       <select id="level">
+        <option value="" selected disabled hidden>ゆうせん</option>
         <option value="1">★</option>
         <option value="2">★★</option>
         <option value="3">★★★</option>
@@ -54,13 +56,13 @@
       <ul id="todo-list"></ul>
     </section>
 
-    <!-- 完了済みタスク -->
+    <!-- 完了済み -->
     <section id="view-done">
       <h2>おぼえた ことば</h2>
       <ul id="done-list"></ul>
     </section>
 
-    <!-- 呪文 -->
+    <!-- 呪文画面 -->
     <section id="view-spell">
       <h2>ふっかつの じゅもん</h2>
       <textarea id="spell-output" rows="3" readonly placeholder="ここに じゅもん が でてくるぞ"></textarea>
@@ -69,15 +71,16 @@
       <textarea id="spell-input" rows="3" placeholder="じゅもん を にゅうりょくせよ"></textarea>
       <button id="restore-btn">じゅもん を つかう</button>
     </section>
+
   </main>
 
-  <!-- テーマ切替 -->
+  <!-- フッター -->
   <footer id="theme-section">
     <button id="toggle-theme">テーマを こうかん</button>
   </footer>
 
+  <!-- ビュートグルスクリプト -->
   <script>
-    // メニュー表示のトグル
     document.addEventListener("DOMContentLoaded", () => {
       const toggleButton = document.getElementById("menu-toggle");
       const menuBox = document.getElementById("menu-box");
@@ -86,21 +89,20 @@
         menuBox.classList.toggle("hidden");
       });
 
-      // 初期表示
       showView("view-input");
     });
 
-    // 画面切り替え関数（グローバルに必要）
     function showView(viewId) {
-      const views = document.querySelectorAll("main > section");
-      views.forEach(view => view.classList.remove("active"));
+      document.querySelectorAll("main > section").forEach(section => {
+        section.classList.remove("active");
+      });
+
       const target = document.getElementById(viewId);
       if (target) target.classList.add("active");
 
-      // メニューを閉じる
-      const menuBox = document.getElementById("menu-box");
-      menuBox.classList.add("hidden");
+      document.getElementById("menu-box").classList.add("hidden");
     }
   </script>
+
 </body>
 </html>

@@ -1,59 +1,58 @@
-// ==== DOM取得 ====
-const wordInput = document.getElementById("word");
-const meaningInput = document.getElementById("meaning");
-const exampleInput = document.getElementById("example");
-const levelSelect = document.getElementById("level");
-const addBtn = document.getElementById("add-btn");
-const todoList = document.getElementById("todo-list");
-const doneList = document.getElementById("done-list");
+// =====================
+// DOM 要素の取得
+// =====================
+const wordInput       = document.getElementById("word");
+const meaningInput    = document.getElementById("meaning");
+const exampleInput    = document.getElementById("example");
+const levelSelect     = document.getElementById("level");
+const addBtn          = document.getElementById("add-btn");
+const todoList        = document.getElementById("todo-list");
+const doneList        = document.getElementById("done-list");
 
-const toggleThemeBtn = document.getElementById("toggle-theme");
-
-const spellOutput = document.getElementById("spell-output");
-const spellInput = document.getElementById("spell-input");
-const generateSpellBtn = document.getElementById("generate-spell");
-const restoreBtn = document.getElementById("restore-btn");
+const toggleThemeBtn     = document.getElementById("toggle-theme");
+const spellOutput        = document.getElementById("spell-output");
+const spellInput         = document.getElementById("spell-input");
+const generateSpellBtn   = document.getElementById("generate-spell");
+const restoreBtn         = document.getElementById("restore-btn");
 
 let tasks = [];
 
-// ==== ひらがな辞書 ====
+// =====================
+// Base64 ⇔ ひらがな辞書
+// =====================
 const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
 const hiraMap = [
-  // A〜Z（26文字）
   "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ",
   "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と",
-  "な", "に", "ぬ", "ね", "の", "は",
-
-  // a〜z（26文字）
-  "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や",
-  "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん",
-  "が", "ぎ", "ぐ", "げ", "ご", "ざ",
-
-  // 0〜9（10文字）
-  "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば",
-
-  // +, /
-  "び", "ぶ"
+  "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ",
+  "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り",
+  "る", "れ", "ろ", "わ", "を", "ん", "が", "ぎ", "ぐ", "げ",
+  "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で",
+  "ど", "ば", "び", "ぶ"
 ];
 
-// ==== テーマ設定 ====
+// =====================
+// 初期化処理
+// =====================
 window.addEventListener("DOMContentLoaded", () => {
+  // タスク復元
   const saved = localStorage.getItem("tasks");
   if (saved) {
     tasks = JSON.parse(saved);
     render();
   }
 
+  // テーマ設定
   const theme = localStorage.getItem("theme");
-  if (theme === "dark") {
-    document.body.classList.remove("light");
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.add("light");
-  }
+  document.body.classList.add(theme === "dark" ? "dark" : "light");
+
+  // セレクトの初期色設定
+  levelSelect.style.color = levelSelect.value === "" ? "#848484" : "#000";
 });
 
+// =====================
+// テーマ切り替え
+// =====================
 toggleThemeBtn.addEventListener("click", () => {
   const isLight = document.body.classList.contains("light");
   document.body.classList.toggle("light", !isLight);
@@ -61,40 +60,51 @@ toggleThemeBtn.addEventListener("click", () => {
   localStorage.setItem("theme", isLight ? "dark" : "light");
 });
 
-// ==== タスク追加 ====
+// =====================
+// タスク追加
+// =====================
 addBtn.addEventListener("click", () => {
-  const word = wordInput.value.trim();
+  const word    = wordInput.value.trim();
   const meaning = meaningInput.value.trim();
   const example = exampleInput.value.trim();
-  const level = parseInt(levelSelect.value);
+  const level   = levelSelect.value;
 
-  if (!word || !meaning) return alert("たんご と いみ は ひつよう です！");
+  if (!word || !meaning) return alert("たんご と いみ が ひつよう です！");
+  if (level === "") return alert("ゆうせん を えらんでください！");
 
-  const task = {
+  tasks.push({
     word,
     meaning,
     example,
-    level,
+    level: parseInt(level),
     isDone: false
-  };
+  });
 
-  tasks.push(task);
   saveTasks();
   render();
+  clearInputs();
+});
 
+function clearInputs() {
   wordInput.value = "";
   meaningInput.value = "";
   exampleInput.value = "";
-  levelSelect.value = "1";
-});
+  levelSelect.value = "";
+  levelSelect.style.color = "#848484";
+}
 
-// ==== タスク描画 ====
+// =====================
+// タスク描画
+// =====================
 function render() {
   todoList.innerHTML = "";
   doneList.innerHTML = "";
 
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
+    li.classList.add("word-item");
+    if (task.isDone) li.classList.add("done");
+
     li.innerHTML = `
       <strong>${task.word}</strong> - ${task.meaning} - ★${task.level}<br>
       <em>${task.example}</em><br>
@@ -102,16 +112,13 @@ function render() {
       <button onclick="deleteTask(${index})">さくじょ</button>
     `;
 
-    if (task.isDone) {
-      li.classList.add("done");
-      doneList.appendChild(li);
-    } else {
-      todoList.appendChild(li);
-    }
+    (task.isDone ? doneList : todoList).appendChild(li);
   });
 }
 
-// ==== 状態切り替え・削除・保存 ====
+// =====================
+// タスク状態切替・削除・保存
+// =====================
 function toggleDone(index) {
   tasks[index].isDone = !tasks[index].isDone;
   saveTasks();
@@ -130,59 +137,24 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// ==== Base64 → ひらがな変換 ====
+// =====================
+// ひらがな⇔Base64変換
+// =====================
 function base64ToHiragana(str) {
-  let hira = "";
-  for (let char of str) {
-    const index = base64Chars.indexOf(char);
-    if (index !== -1) {
-      hira += hiraMap[index];
-    } // 無効な文字は無視
-  }
-  return hira;
+  return [...str].map(char => hiraMap[base64Chars.indexOf(char)] || "").join("");
 }
-
 
 function hiraganaToBase64(hiraStr) {
-  let base64 = "";
-  for (let char of hiraStr) {
-    const index = hiraMap.indexOf(char);
-    if (index !== -1) {
-      base64 += base64Chars[index];
-    } // 無効な文字は無視
-  }
-  return base64;
+  return [...hiraStr].map(char => base64Chars[hiraMap.indexOf(char)] || "").join("");
 }
 
-
-// ==== 呪文発行・復元 ====
-
-restoreBtn.addEventListener("click", () => {
-  try {
-    const hira = spellInput.value.trim();
-    const base64 = hiraganaToBase64(hira);
-    const json = decodeURIComponent(escape(atob(base64)));
-    const restored = JSON.parse(json);
-    if (Array.isArray(restored)) {
-      tasks = restored;
-      saveTasks();
-      render();
-      alert("ふっかつ したぞ！");
-    } else {
-      throw new Error();
-    }
-  } catch {
-    alert("ふっかつ に しっぱいした… じゅもん が まちがっている かも！");
-  }
-});
-
-
+// =====================
+// 呪文機能
+// =====================
 generateSpellBtn.addEventListener("click", () => {
   try {
     const json = JSON.stringify(tasks);
     const base64 = btoa(unescape(encodeURIComponent(json)));
-    console.log("Base64出力:", base64);
-    console.log("Base64の長さ:", base64.length);
     const hiraSpell = base64ToHiragana(base64);
     spellOutput.value = hiraSpell;
   } catch {
@@ -190,8 +162,35 @@ generateSpellBtn.addEventListener("click", () => {
   }
 });
 
+restoreBtn.addEventListener("click", () => {
+  try {
+    const hira = spellInput.value.trim();
+    const base64 = hiraganaToBase64(hira);
+    const json = decodeURIComponent(escape(atob(base64)));
+    const restored = JSON.parse(json);
+
+    if (!Array.isArray(restored)) throw new Error();
+
+    tasks = restored;
+    saveTasks();
+    render();
+    alert("ふっかつ したぞ！");
+  } catch {
+    alert("ふっかつ に しっぱいした… じゅもん が まちがっている かも！");
+  }
+});
+
+// =====================
+// セレクト色の動的変更
+// =====================
+levelSelect.addEventListener("change", function () {
+  this.style.color = this.value === "" ? "#848484" : "#000";
+});
+
+// =====================
+// メニュー切り替え
+// =====================
 function toggleMenu() {
   const menu = document.getElementById("menu-box");
   menu.classList.toggle("hidden");
 }
-
