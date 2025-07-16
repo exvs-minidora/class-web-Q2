@@ -71,8 +71,8 @@ addBtn.addEventListener("click", () => {
   const example = exampleInput.value.trim();
   const level   = levelSelect.value;
 
-  if (!word || !meaning) return alert("たんご と いみ が ひつよう です！");
-  if (level === "") return alert("ゆうせん を えらんでください！");
+  if (!word || !meaning) return alert("たんご と いみ が ない！");
+  if (level === "") return alert("ゆうせん が ついていない！");
 
   tasks.push({
     word,
@@ -128,7 +128,7 @@ function toggleDone(index) {
 }
 
 function deleteTask(index) {
-  if (confirm("ほんとうに けす？")) {
+  if (confirm("ほんとうに けしますか？")) {
     tasks.splice(index, 1);
     saveTasks();
     render();
@@ -178,9 +178,9 @@ restoreBtn.addEventListener("click", () => {
     tasks = restored;
     saveTasks();
     render();
-    alert("ふっかつ したぞ！");
+    alert("ふっかつ した！");
   } catch {
-    alert("ふっかつ に しっぱいした… じゅもん が まちがっている かも！");
+    alert("おきのどくですが ふっかつ は しっぱい しました");
   }
 });
 
