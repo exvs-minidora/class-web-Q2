@@ -1,0 +1,226 @@
+@font-face {
+  font-family: 'BestTenCRT';
+  src: url('../fonts/BestTen-CRT.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 全体設定 */
+body {
+  font-family: 'BestTenCRT', monospace;
+  background-color: var(--bg);
+  color: var(--text);
+  padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ライトテーマ（明るく・柔らかく） */
+/* ライトテーマ（背景：薄クリーム） */
+body.light {
+  --bg: #FDFEEE;
+  --text: #010000;
+  --accent: #010000;
+  --box: #ffffff;
+  --hover: #ffffff;
+  --border: #000000; /* ← 追加 */
+}
+
+/* ダークテーマ（背景：黒） */
+body.dark {
+  --bg: #000000;
+  --text: #ffffff;
+  --accent: #ffffff;
+  --box: #000000;
+  --hover: #444444;
+  --border: #ffffff; /* ← 白い枠に */
+}
+
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+section {
+  background-color: var(--box);
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+input, select, textarea {
+  font-family: 'BestTenCRT', monospace;
+  font-size: 12px;
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--accent);
+  background-color: var(--bg); 
+  color: var(--text);           /* 文字も背景に合わせて */
+  border-radius: 6px;
+}
+
+button {
+  font-family: 'BestTenCRT', monospace;
+  font-size: 12px;
+  background-color: #fff;           /* ← 変更 */
+  color: #000;                      /* ← 変更 */
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  box-shadow: 0 0 0 2px black, 4px 4px 0 0 #000;
+  text-shadow: none;               /* ← 変更：文字くっきり */
+}
+
+button:hover {
+  background-color: #000;          /* ← 反転 */
+  color: #fff;                     /* ← 反転 */
+  text-shadow: 1px 1px 0 #000;     /* ← 白字に黒縁で見やすく */
+}
+
+/* タスクリスト */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: #f8f8f8;
+  border-left: 5px solid var(--accent);
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+li.done {
+  background-color: #d3ffd3;
+  text-decoration: line-through;
+  color: gray;
+}
+
+/* SPAビュー切り替え */
+main > section {
+  display: none;
+}
+main > section.active {
+  display: block;
+}
+
+/* テーマ切替セクション（画面右下に固定） */
+#theme-section {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+#toggle-theme {
+  font-family: 'BestTenCRT', monospace;
+  font-size: 12px;
+  background-color: #444;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  box-shadow: 0 0 0 2px black, 4px 4px 0 0 #000;
+  text-shadow: 1px 1px 0 #000;
+}
+#toggle-theme:hover {
+  background-color: #222;
+}
+
+/* メニューアイコン */
+#menu-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* メニュー本体 */
+#menu-box {
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  background-color: var(--bg);      /* ← 修正：背景と揃える */
+  border: 2px solid #000000;        /* ← 明確な黒枠をつける */
+  box-shadow: none;                 /* ← 影を消すか薄くする */
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  padding: 10px;
+  z-index: 999;
+}
+
+
+#menu-box button {
+  font-family: 'BestTenCRT', monospace;
+  font-size: 12px;
+  padding: 6px;
+  cursor: pointer;
+  background-color: #fff;           /* ← 通常は白背景 */
+  color: #000;                      /* ← 黒文字 */
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px black, 2px 2px 0 0 #000;
+  text-shadow: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#menu-box button:hover {
+  background-color: #000;           /* ← 黒背景に */
+  color: #fff;                      /* ← 白文字に */
+  text-shadow: 1px 1px 0 #000;      /* ← 黒の縁取り */
+}
+
+
+.hidden {
+  display: none !important;
+}
+
+#view-input {
+  background-color: var(--bg); /* bodyと同じ色に */
+  border: 2px solid #000000;   /* 黒い枠線を追加 */
+  border-radius: 12px;         /* 任意：角をちょっと丸く */
+  padding: 30px;               /* 中の余白を調整 */
+  box-shadow: none;            /* シャドウを消してクラシックに */
+}
+
+#view-done {
+  background-color: var(--bg);   /* ← 背景と同じ色に */
+  border: 2px solid #000000;     /* ← はっきりした黒枠 */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: none;
+}
+
+#view-spell {
+  background-color: var(--bg);   /* ← 背景と同じ色に */
+  border: 2px solid #000000;     /* ← はっきりした黒枠 */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: none;
+}
+
+#view-input,
+#view-done,
+#view-spell,
+#menu-box {
+  border: 3px solid var(--border); /* ← 黒 or 白の切替対応 */
+}

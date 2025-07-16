@@ -1,12 +1,106 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>My First Page</title>
+  <title>えいたんごの だいぼうけん</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- JS：deferで後から読み込む -->
+  <script src="js/script.js" defer></script>
 </head>
-<body>
-  <h1>こんにちは、GitHub Pages！</h1>
-  <p>これは私のはじめての公開Webページです。</p>
+<body class="light">
+
+  <header>
+    <h1>えいたんごの だいぼうけん</h1>
+  </header>
+
+  <!-- メニューアイコン -->
+  <div id="menu-toggle">☰</div>
+
+  <!-- メニュー本体 -->
+  <div id="menu-box" class="hidden">
+    <button onclick="showView('view-input')">入力</button>
+    <button onclick="showView('view-list')">リスト</button>
+    <button onclick="showView('view-done')">完了</button>
+    <button onclick="showView('view-spell')">呪文</button>
+  </div>
+
+  <main>
+    <!-- 入力画面 -->
+    <section id="view-input" class="active">
+      <h2>たんご を とうろく</h2>
+      <input type="text" id="word" placeholder="たんご (例: apple)">
+      <input type="text" id="meaning" placeholder="いみ (例: りんご)">
+      <input type="text" id="example" placeholder="れいぶん (例: I eat an apple.)">
+      <select id="level">
+        <option value="1">★</option>
+        <option value="2">★★</option>
+        <option value="3">★★★</option>
+        <option value="4">★★★★</option>
+        <option value="5">★★★★★</option>
+      </select>
+      <button id="add-btn">＋ おぼえる</button>
+    </section>
+
+    <!-- 単語リスト -->
+    <section id="view-list">
+      <h2>おぼえるべき ことば</h2>
+      <ul id="todo-list"></ul>
+    </section>
+
+    <!-- 完了済みタスク -->
+    <section id="view-done">
+      <h2>おぼえた ことば</h2>
+      <ul id="done-list"></ul>
+    </section>
+
+    <!-- 呪文 -->
+    <section id="view-spell">
+      <h2>ふっかつの じゅもん</h2>
+      <textarea id="spell-output" rows="3" readonly placeholder="ここに じゅもん が でてくるぞ"></textarea>
+      <button id="generate-spell">じゅもん を はっこう</button>
+
+      <textarea id="spell-input" rows="3" placeholder="じゅもん を にゅうりょくせよ"></textarea>
+      <button id="restore-btn">じゅもん を つかう</button>
+    </section>
+  </main>
+
+  <!-- テーマ切替 -->
+  <footer id="theme-section">
+    <button id="toggle-theme">テーマを こうかん</button>
+  </footer>
+
+  <script>
+    // メニュー表示のトグル
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleButton = document.getElementById("menu-toggle");
+      const menuBox = document.getElementById("menu-box");
+
+      toggleButton.addEventListener("click", () => {
+        menuBox.classList.toggle("hidden");
+      });
+
+      // 初期表示
+      showView("view-input");
+    });
+
+    // 画面切り替え関数（グローバルに必要）
+    function showView(viewId) {
+      const views = document.querySelectorAll("main > section");
+      views.forEach(view => view.classList.remove("active"));
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add("active");
+
+      // メニューを閉じる
+      const menuBox = document.getElementById("menu-box");
+      menuBox.classList.add("hidden");
+    }
+  </script>
 </body>
 </html>
