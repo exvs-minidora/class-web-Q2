@@ -62,15 +62,19 @@
       <ul id="done-list"></ul>
     </section>
 
-    <!-- 呪文画面 -->
-    <section id="view-spell">
-      <h2>ふっかつの じゅもん</h2>
+  <!-- 呪文画面 -->
+  <section id="view-spell">
+    <h2>ふっかつの じゅもん</h2>
+    
+    <div id="spell-output-box" style="display: none;">
       <textarea id="spell-output" rows="3" readonly placeholder="ここに じゅもん が でてくるぞ"></textarea>
-      <button id="generate-spell">じゅもん を はっこう</button>
+    </div>
+    
+    <button id="generate-spell">じゅもん を はっこう</button>
 
-      <textarea id="spell-input" rows="3" placeholder="じゅもん を にゅうりょくせよ"></textarea>
-      <button id="restore-btn">じゅもん を つかう</button>
-    </section>
+    <textarea id="spell-input" rows="3" placeholder="じゅもん を にゅうりょくせよ"></textarea>
+    <button id="restore-btn">じゅもん を つかう</button>
+  </section>
 
   </main>
 

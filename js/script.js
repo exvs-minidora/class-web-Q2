@@ -159,6 +159,8 @@ generateSpellBtn.addEventListener("click", () => {
     const base64 = btoa(unescape(encodeURIComponent(json)));
     const hiraSpell = base64ToHiragana(base64);
     spellOutput.value = hiraSpell;
+
+    document.getElementById("spell-output-box").style.display = "block";
   } catch {
     alert("じゅもん の はっこう に しっぱいした！");
   }
