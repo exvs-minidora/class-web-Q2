@@ -277,4 +277,26 @@ function showView(viewId) {
   selectSound.play();
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const copyBtn = document.getElementById("copy-spell");
+  const spellOutput = document.getElementById("spell-output");
+  const selectSound = document.getElementById("sound-select");
+
+  if (copyBtn && spellOutput) {
+    copyBtn.addEventListener("click", () => {
+      if (!spellOutput.value.trim()) {
+        alert("こんな エラーは おこる はずもない！");
+        return;
+      }
+
+      spellOutput.select();
+      document.execCommand("copy"); // 古いが一番互換性が高い
+      selectSound.currentTime = 0;
+      selectSound.play();
+      alert("コピーした！");
+    });
+  }
+});
+
+
 window.showView = showView;
