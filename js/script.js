@@ -19,6 +19,7 @@ const textColor = getComputedStyle(document.body).getPropertyValue('--text').tri
 
 const successSound = document.getElementById("sound-success");
 const failSound = document.getElementById("sound-fail");
+const missSound = document.getElementById("sound-miss");
 
 
 let tasks = [];
@@ -75,8 +76,12 @@ addBtn.addEventListener("click", () => {
   const example = exampleInput.value.trim();
   const level   = levelSelect.value;
 
-  if (!word || !meaning) return alert("たんご と いみ が ない！");
-  if (level === "") return alert("ゆうせん が ついていない！");
+  if (!word || !meaning) {
+    missSound.currentTime = 0; missSound.play(); return alert("たんご と いみ が ない！");
+  }
+  if (level === "") {
+    missSound.currentTime = 0; missSound.play(); return alert("ゆうせん が ついていない！");
+  }
 
   tasks.push({
     word,
