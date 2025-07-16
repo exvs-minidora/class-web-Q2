@@ -17,10 +17,14 @@ const restoreBtn         = document.getElementById("restore-btn");
 
 const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
 
-const successSound = document.getElementById("sound-success");
-const failSound = document.getElementById("sound-fail");
-const missSound = document.getElementById("sound-miss");
-
+const successSound     = document.getElementById("sound-success");
+const failSound        = document.getElementById("sound-fail");
+const missSound        = document.getElementById("sound-miss");
+const addSound         = document.getElementById("sound-add");
+const rememberedSound  = document.getElementById("sound-remembered");
+const deleteSound      = document.getElementById("sound-delete");
+const throwawaySound   = document.getElementById("sound-throwaway");
+const selectSound      = document.getElementById("sound-select");
 
 let tasks = [];
 
@@ -55,6 +59,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // セレクトの初期色設定
   levelSelect.style.color = levelSelect.value === "" ? "#848484" : "#000";
+
+  // メニュー切り替えボタン
+  const toggleButton = document.getElementById("menu-toggle");
+  toggleButton.addEventListener("click", toggleMenu);
+
+  // 初期ビュー表示
+  showView("view-input");
 });
 
 // =====================
@@ -65,6 +76,9 @@ toggleThemeBtn.addEventListener("click", () => {
   document.body.classList.toggle("light", !isLight);
   document.body.classList.toggle("dark", isLight);
   localStorage.setItem("theme", isLight ? "dark" : "light");
+
+  selectSound.currentTime = 0;
+  selectSound.play();
 });
 
 // =====================
@@ -77,10 +91,14 @@ addBtn.addEventListener("click", () => {
   const level   = levelSelect.value;
 
   if (!word || !meaning) {
-    missSound.currentTime = 0; missSound.play(); return alert("たんご と いみ が ない！");
+    missSound.currentTime = 0;
+    missSound.play();
+    return alert("たんご と いみ が ない！");
   }
   if (level === "") {
-    missSound.currentTime = 0; missSound.play(); return alert("ゆうせん が ついていない！");
+    missSound.currentTime = 0;
+    missSound.play();
+    return alert("ゆうせん が ついていない！");
   }
 
   tasks.push({
@@ -90,6 +108,9 @@ addBtn.addEventListener("click", () => {
     level: parseInt(level),
     isDone: false
   });
+
+  addSound.currentTime = 0;
+  addSound.play();
 
   saveTasks();
   render();
@@ -131,16 +152,36 @@ function render() {
 // タスク状態切替・削除・保存
 // =====================
 function toggleDone(index) {
+  const wasDone = tasks[index].isDone;
   tasks[index].isDone = !tasks[index].isDone;
+
   saveTasks();
   render();
+
+  if (wasDone) {
+    missSound.currentTime = 0;
+    missSound.play();
+  } else {
+    rememberedSound.currentTime = 0;
+    rememberedSound.play();
+  }
 }
 
 function deleteTask(index) {
   if (confirm("ほんとうに けしますか？")) {
+    const wasDone = tasks[index].isDone;
+
     tasks.splice(index, 1);
     saveTasks();
     render();
+
+    if (wasDone) {
+      deleteSound.currentTime = 0;
+      deleteSound.play();
+    } else {
+      throwawaySound.currentTime = 0;
+      throwawaySound.play();
+    }
   }
 }
 
@@ -170,6 +211,9 @@ generateSpellBtn.addEventListener("click", () => {
     spellOutput.value = hiraSpell;
 
     document.getElementById("spell-output-box").style.display = "block";
+
+    selectSound.currentTime = 0;
+    selectSound.play();
   } catch {
     alert("じゅもん の はっこう に しっぱいした！");
   }
@@ -201,13 +245,39 @@ restoreBtn.addEventListener("click", () => {
 // セレクト色の動的変更
 // =====================
 levelSelect.addEventListener("change", function () {
-  this.style.color = this.value === "" ? "#848484" : fff;
+  this.style.color = this.value === "" ? "#848484" : "#fff";
 });
 
 // =====================
 // メニュー切り替え
 // =====================
 function toggleMenu() {
-  const menu = document.getElementById("menu-box");
-  menu.classList.toggle("hidden");
+  const menuBox = document.getElementById("menu-box");
+  menuBox.classList.toggle("hidden");
+
+  console.log("toggleMenu fired");
+  selectSound.currentTime = 0;
+  selectSound.play();
 }
+
+// =====================
+// ビュー切り替え（SPA）
+// =====================
+function showView(viewId) {
+  document.querySelectorAll("main > section").forEach(section => {
+    section.classList.remove("active");
+  });
+
+  const target = document.getElementById(viewId);
+  if (target) target.classList.add("active");
+
+  const menuBox = document.getElementById("menu-box");
+  if (menuBox) menuBox.classList.add("hidden");
+
+  // ←★ ここで音を鳴らす
+  selectSound.currentTime = 0;
+  selectSound.play();
+}
+
+// ← HTMLから呼べるようにする
+window.showView = showView;

@@ -83,34 +83,14 @@
     <button id="toggle-theme">テーマを こうかん</button>
   </footer>
 
-  <!-- ビュートグルスクリプト -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggleButton = document.getElementById("menu-toggle");
-      const menuBox = document.getElementById("menu-box");
-
-      toggleButton.addEventListener("click", () => {
-        menuBox.classList.toggle("hidden");
-      });
-
-      showView("view-input");
-    });
-
-    function showView(viewId) {
-      document.querySelectorAll("main > section").forEach(section => {
-        section.classList.remove("active");
-      });
-
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add("active");
-
-      document.getElementById("menu-box").classList.add("hidden");
-    }
-  </script>
-
   <audio id="sound-success" src="assets/audio/nc85184.mp3" preload="auto"></audio>
   <audio id="sound-fail" src="assets/audio/nc162407.mp3" preload="auto"></audio>
   <audio id="sound-miss" src="assets/audio/nc252617.mp3" preload="auto"></audio>
+  <audio id="sound-add" src="assets/audio/nc246176.mp3" preload="auto" ></audio>
+  <audio id="sound-remembered" src="assets/audio/nc168809.mp3" preload="auto"></audio>
+  <audio id="sound-delete" src="assets/audio/nc255387.mp3" preload="auto"></audio>
+  <audio id="sound-throwaway" src="assets/audio/nc246188.mp3" preload="auto"></audio>
+  <audio id="sound-select" src="assets/audio/nc395514.mp3" preload="auto"></audio>
 
 </body>
 </html>
