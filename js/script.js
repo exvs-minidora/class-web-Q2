@@ -17,6 +17,10 @@ const restoreBtn         = document.getElementById("restore-btn");
 
 const textColor = getComputedStyle(document.body).getPropertyValue('--text').trim();
 
+const successSound = document.getElementById("sound-success");
+const failSound = document.getElementById("sound-fail");
+
+
 let tasks = [];
 
 // =====================
@@ -178,8 +182,12 @@ restoreBtn.addEventListener("click", () => {
     tasks = restored;
     saveTasks();
     render();
+    successSound.currentTime = 0;
+    successSound.play();
     alert("ふっかつ した！");
   } catch {
+    failSound.currentTime = 0;
+    failSound.play();
     alert("おきのどくですが ふっかつ は しっぱい しました");
   }
 });
