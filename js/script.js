@@ -28,8 +28,15 @@ const selectSound      = document.getElementById("sound-select");
 
 let tasks = [];
 
+let theme = localStorage.getItem("theme");
+if (!theme) {
+  theme = "dark";
+  localStorage.setItem("theme", "dark");
+}
+document.body.classList.add(theme === "dark" ? "dark" : "light");
+
 // =====================
-// Base64 ⇔ ひらがな辞書
+// Base64 ⇌ ひらがな辞書
 // =====================
 const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const hiraMap = [
@@ -46,25 +53,17 @@ const hiraMap = [
 // 初期化処理
 // =====================
 window.addEventListener("DOMContentLoaded", () => {
-  // タスク復元
   const saved = localStorage.getItem("tasks");
   if (saved) {
     tasks = JSON.parse(saved);
     render();
   }
 
-  // テーマ設定
-  const theme = localStorage.getItem("theme");
-  document.body.classList.add(theme === "dark" ? "dark" : "light");
-
-  // セレクトの初期色設定
   levelSelect.style.color = levelSelect.value === "" ? "#848484" : "#000";
 
-  // メニュー切り替えボタン
   const toggleButton = document.getElementById("menu-toggle");
   toggleButton.addEventListener("click", toggleMenu);
 
-  // 初期ビュー表示
   showView("view-input");
 });
 
@@ -190,7 +189,7 @@ function saveTasks() {
 }
 
 // =====================
-// ひらがな⇔Base64変換
+// ひらがな⇌Base64変換
 // =====================
 function base64ToHiragana(str) {
   return [...str].map(char => hiraMap[base64Chars.indexOf(char)] || "").join("");
@@ -261,7 +260,7 @@ function toggleMenu() {
 }
 
 // =====================
-// ビュー切り替え（SPA）
+// ビュー切り替え、音鳴らす
 // =====================
 function showView(viewId) {
   document.querySelectorAll("main > section").forEach(section => {
@@ -274,10 +273,8 @@ function showView(viewId) {
   const menuBox = document.getElementById("menu-box");
   if (menuBox) menuBox.classList.add("hidden");
 
-  // ←★ ここで音を鳴らす
   selectSound.currentTime = 0;
   selectSound.play();
 }
 
-// ← HTMLから呼べるようにする
 window.showView = showView;
