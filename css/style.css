@@ -218,6 +218,14 @@ main > section.active {
   box-shadow: none;
 }
 
+#view-list {
+  background-color: var(--bg);   /* ← 背景と同じ色に */
+  border: 2px solid #000000;     /* ← はっきりした黒枠 */
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: none;
+}
+
 #view-input,
 #view-done,
 #view-spell,
